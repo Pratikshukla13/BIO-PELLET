@@ -22,11 +22,33 @@
         <label for="pincode">Pincode:</label>
         <input type="number" id="pincode" required>
         <br>
-        <button type="submit">Find Nearest Plant</button> 
+        <button type="button" onclick="findNearestPlant()">Find Nearest Plant</button> 
     </form>
     <div id="result"></div>
-    <script type="text/html" src="final.html"></script>
-   
 
+    <script>
+        function findNearestPlant() {
+            // Get user input (you can use this data for further processing)
+            var userName = document.getElementById("name").value;
+            var cropName = document.getElementById("cropname").value;
+            var cropQuantity = document.getElementById("quantity").value;
+            var pincode = document.getElementById("pincode").value;
+
+            // Fetch data from local JSON file
+            fetch('data.json')
+                .then(response => response.json())
+                .then(biofuelData => {
+                    // Clear previous results
+                    document.getElementById("result").innerHTML = "";
+
+                    // Display the biofuel suppliers
+                    biofuelData.forEach(function(plant) {
+                        var plantInfo = `<p><strong>${plant.name}</strong><br>Rating: ${plant.rating}<br>Location: (${plant.latitude}, ${plant.longitude})</p>`;
+                        document.getElementById("result").innerHTML += plantInfo;
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+    </script>
 </body>
 </html>
